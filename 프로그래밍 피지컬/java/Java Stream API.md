@@ -1,11 +1,9 @@
 ## Stream 개념
----
 Stream은 Java 8에서 도입된 기능으로, 데이터의 흐름을 표현하는 객체입니다. 컬렉션, 배열 등의 데이터 소스로부터 생성되며, 데이터를 순차적으로 또는 병렬로 처리할 수 있게 해줍니다.
 
 [이 글](https://www.elancer.co.kr/blog/view?seq=255)을 참고하면 Java에서 제공하는 Stream API에 대해 이해하기 수월할 것이다.
 
 ## Stream의 주요 특징:
----
 1. 파이프라이닝 (Pipelining):
    - 여러 연산을 연결하여 복잡한 데이터 처리 파이프라인을 구성할 수 있습니다.
    - 예: `stream.filter(...).map(...).reduce(...)`
@@ -20,8 +18,8 @@ Stream은 Java 8에서 도입된 기능으로, 데이터의 흐름을 표현하�
 
 4. 한 번만 사용 (One-time Use):
    - Stream은 한 번 사용하면 닫히며, 재사용할 수 없습니다.
+
 ## Stream의 주요 연산:
----
 1. Stream 생성:
    - Stream API를 사용하여 data를 가공하기 위해 최초 1회 수행
    - 모든 data가 한번에 memory에 load되지 않는 것이 특징
