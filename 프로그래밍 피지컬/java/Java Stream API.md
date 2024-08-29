@@ -44,7 +44,7 @@ Stream은 Java 8에서 도입된 기능으로, 데이터의 흐름을 표현하�
 	   - Collectors.toSet()
 	   - Collectors.toCollection( ... )  << stream을 구체화된 collection으로 변환
 	   - Collectors.toMap()
-	   - Collectors.toArray()
+   - toArray(T[]::new): 배열로 결과를 반환. 'T' class type에 해당하는 배열을 최종 생성
    - reduce(): 요소를 하나의 결과로 줄임
    - count(): 요소 개수 반환
    - anyMatch(), allMatch(), noneMatch(): 조건 충족 여부 확인
