@@ -25,10 +25,20 @@ class Person implements Comparable<Person> {
         this.age = age;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
     // 나이 기준으로 비교
     @Override
     public int compareTo(Person other) {
-        return Integer.compare(this.age, other.age);
+        // Integer의 compare() 메소드는 '첫 번째 인자 - 두 번째 인자' 값이 반환된다고 보면 된다. (이 경우 최소 힙으로 동작함)
+        // 만약 두 인자 순서를 바꿔서 입력하면 최대 힙으로 구현 가능하다.
+        return Integer.compare(this.age, other.getAge());
     }
 
     @Override
@@ -39,6 +49,39 @@ class Person implements Comparable<Person> {
 ```
 
 `compareTo` 메서드는 두 `Person` 객체의 나이를 비교하고, 이를 기반으로 순서를 정합니다.
+
+만약 이름에 대해 사전순으로 비교하고자 한다면 String.compareTo() 메소드를 활용해주면 된다. 다만 이 경우 **String에서 구현된 compareTo()를 호출하는 것이기 때문에, 해당 사항을 명시하기 위해 'this' 키워드를 사용하여 비교해줘야 한다.**
+
+```java
+class Person implements Comparable<Person> {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    // 이름 사전순으로 비교
+    @Override
+    public int compareTo(Person other) {
+        return this.name.compareTo(other.getName());
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}
+```
 
 ### 사용 예시
 
@@ -64,23 +107,40 @@ public class ComparableExample {
 }
 ```
 
-이 코드를 실행하면 `Person` 객체가 나이순으로 정렬됩니다.
+Arrays(배열인 경우) 또는 Collections(컬렉션 객체의 경우) 클래스의 'sort()' 메소드를 사용해주면, 해당 객체에 대해 Comparable의 compareTo() 메소드를 구현한 것에 따라 정렬된다.
+
+### 만약 첫 번째 비교 인자가 서로 같다면?
+
+파이썬의 heapq 라이브러리에서는 내부적으로 알아서 그 다음 인자에 대한 비교 연산에 들어간다. 하지만 Java는 다 직접 구현해줘야 한다. 그래도 이 특성은 우선순위 비교가 까다로운 상황의 경우에는 오히려 장점이 될 수 있다. 예를 들어 첫 번째 인자는 최소 힙 그리고 두 번째 인자는 최대 힙 형식으로 작동시켜야 한다면 파이썬에서는 별도의 조치를 취해야 하겠지만, Java에서는 애초에 compareTo() 메소드를 커스텀 오버라이딩을 해야 하다 보니 개발자가 직접 매 경우의 수마다 커스텀하게 우선 순위 기준 부여가 가능하기 때문이다.
+
+```java
+class Person implements Comparable<Person> {
+
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    @Override
+    public int compareTo(Person o) {
+
+        // 나이가 같은 경우 이름을 사전순으로 비교
+        if (age == o.getAge())
+            return this.name.compareTo(name, o.getName());
+        else
+            return Integer.compare(this.age, o.getAge())
+    }
+
+}
 ```
-Bob (25)
-Alice (30)
-Charlie (35)
-```
-
-### 주요 개념 정리
-
-1. **자연 순서 정의**: `Comparable`을 구현하는 클래스는 객체 간의 기본 비교 방법을 제공하며, 이를 **자연 순서**라고 합니다.
-   - 예: `String` 클래스는 알파벳 순서, `Integer` 클래스는 숫자 크기에 따라 자연 순서가 정의됩니다.
-   
-2. **`compareTo` 메서드**: 객체 간 비교를 수행하며, **음수, 0, 양수**로 결과를 반환하여 상대적인 크기를 결정합니다.
-
-3. **정렬 메서드에서 사용**: `Arrays.sort()` 또는 `Collections.sort()`와 같은 정렬 메서드는 `Comparable`을 구현한 객체 배열이나 리스트를 정렬할 수 있습니다.
-
-### `Comparable`과 `Comparator`의 차이
-
-- **`Comparable`**: 클래스 자체에 비교 로직을 포함시킵니다. 객체의 **기본 정렬 기준**을 제공하며, 한 가지 정렬 방법만 가능.
-- **`Comparator`**: 별도의 비교 로직을 제공합니다. 여러 기준으로 정렬하고자 할 때 유용합니다. 즉, 특정 기준에 따라 객체를 정렬하고 싶을 때 외부에서 비교 방법을 정의합니다.
