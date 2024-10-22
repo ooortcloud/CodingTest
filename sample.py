@@ -1,34 +1,35 @@
-def backTracking(row):
+def check(src, dst):
+    global graph
 
-    global cnt, n, queenExistList
+    searchList = []
+    searchList.append(src)
+    
+    # 중복 탐색 방지를 위한 방문 리스트 작성
+    visitList = []
 
-    if row == n:
-        cnt += 1
-        return
+    while searchList:
+        next = searchList.pop()
+        visitList.append(next)
+        for nodeList in graph[next]:
+            for index, val in enumerate(nodeList):
+                if (val == 1) and (index not in visitList):
+                    if index == dst:
+                        return 1
+                    else:
+                        searchList.append(index)            
 
-    for col in range(n):
-
-        queenExistList[row] = col
-        if checkQueen(row):
-            backTracking(row+1)
-
-def checkQueen(currentRow):
-
-    global queenExistList
-
-    for row in range(currentRow):
-        if queenExistList[row] == queenExistList[currentRow]:
-            return False
-        
-        if abs(currentRow - row) == abs(queenExistList[currentRow] - queenExistList[row]):
-            return False
-        
-    return True
+    return 0
 
 n = int(input())
 
-queenExistList = [0] * n
+graph = [[]*n for _ in range(n)]
+for _ in range(n):
+    graph.append(list(map(int, input().split())))
 
-cnt = 0
-backTracking(0)
-print(cnt)
+for i in range(n):
+    for j in range(n):
+        if i == j:
+            print(1, end=" ")
+        else:
+            print(check(i, j), end=" ")
+    print()
