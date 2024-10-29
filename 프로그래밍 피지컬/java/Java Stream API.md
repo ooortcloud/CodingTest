@@ -91,6 +91,13 @@ List<Integer> nameLengths = names.stream()
 System.out.println(nameLengths); // 출력: [4, 4, 4, 3]
 ```
 
+```java
+String temp = "01101";
+int[] tempArr = temp.chars().map(c -> c - '0').toArray();
+
+System.out.println(tempArr); // 출력: [0, 1, 1, 0, 1]
+```
+
 3. flatMap(): 각 요소를 스트림으로 변환 후 하나의 스트림으로 평탄화
 
 ```java
